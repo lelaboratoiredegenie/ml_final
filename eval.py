@@ -284,13 +284,13 @@ def evaluate_cm(args, model, test_loader):
             
             outs = model(datas)
 
-            if args.use_fpn and (0 < args.highest < 5):
-                this_name = "layer" + str(args.highest)
-                _cal_evalute_metric(corrects, total_samples, outs[this_name].mean(1), labels, this_name, scores, score_names)
+            # if args.use_fpn and (0 < args.highest < 5):
+            #     this_name = "layer" + str(args.highest)
+            #     _cal_evalute_metric(corrects, total_samples, outs[this_name].mean(1), labels, this_name, scores, score_names)
 
-            if args.use_combiner:
-                this_name = "combiner"
-                _cal_evalute_metric(corrects, total_samples, outs["comb_outs"], labels, this_name, scores, score_names)
+            # if args.use_combiner:
+            #     this_name = "combiner"
+            #     _cal_evalute_metric(corrects, total_samples, outs["comb_outs"], labels, this_name, scores, score_names)
 
             _average_top_k_result(corrects, total_samples, scores, labels)
 
