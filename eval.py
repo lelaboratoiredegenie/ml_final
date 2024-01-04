@@ -290,7 +290,7 @@ def evaluate_cm(args, model, test_loader):
 
             if args.use_combiner:
                 this_name = "combiner"
-                _cal_evalute_metric(corrects, total_samples, outs["comb_outs"], labels, this_name, scores, score_names)
+                # _cal_evalute_metric(corrects, total_samples, outs["comb_outs"], labels, this_name, scores, score_names)
 
             # _average_top_k_result(corrects, total_samples, scores, labels)
 
@@ -315,28 +315,28 @@ def evaluate_cm(args, model, test_loader):
         best_top1 = 0.0
         best_top1_name = ""
         eval_acces = {}
-        for name in corrects:
-            acc = corrects[name] / total_samples[name]
-            acc = round(100 * acc, 3)
-            eval_acces[name] = acc
-            ### only compare top-1 accuracy
-            if "top-1" in name or "highest" in name:
-                if acc > best_top1:
-                    best_top1 = acc
-                    best_top1_name = name
+        # for name in corrects:
+        #     acc = corrects[name] / total_samples[name]
+        #     acc = round(100 * acc, 3)
+        #     eval_acces[name] = acc
+        #     ### only compare top-1 accuracy
+        #     if "top-1" in name or "highest" in name:
+        #         if acc > best_top1:
+        #             best_top1 = acc
+        #             best_top1_name = name
 
         """ wirte xlsx"""
-        results_mat = np.mat(results)
-        y_actual = results_mat[:, 1].transpose().tolist()[0]
-        y_actual = list(map(int, y_actual))
-        y_predict = results_mat[:, 2].transpose().tolist()[0]
-        y_predict = list(map(int, y_predict))
+        # results_mat = np.mat(results)
+        # y_actual = results_mat[:, 1].transpose().tolist()[0]
+        # y_actual = list(map(int, y_actual))
+        # y_predict = results_mat[:, 2].transpose().tolist()[0]
+        # y_predict = list(map(int, y_predict))
 
-        folders = os.listdir(args.val_root)
-        folders.sort()  # sort by alphabet
-        print("[dataset] class:", folders)
-        df_confusion = confusion_matrix(y_actual, y_predict)
-        plot_confusion_matrix(df_confusion, folders, args.save_dir + "infer_cm.png", accuracy=best_top1)
+        # folders = os.listdir(args.val_root)
+        # folders.sort()  # sort by alphabet
+        # print("[dataset] class:", folders)
+        # df_confusion = confusion_matrix(y_actual, y_predict)
+        # plot_confusion_matrix(df_confusion, folders, args.save_dir + "infer_cm.png", accuracy=best_top1)
 
     return best_top1, best_top1_name, eval_acces
 
@@ -362,21 +362,22 @@ def eval_and_save(args, model, val_loader, tlogger):
 
 @torch.no_grad()
 def eval_and_cm(args, model, val_loader, tlogger):
-    tlogger.print("Start Evaluating")
+    tlogger.print("Start Evaluating ...")
     acc, eval_name, eval_acces = evaluate_cm(args, model, val_loader)
-    tlogger.print("....BEST_ACC: {} {}%".format(eval_name, acc))
+    # tlogger.print("....BEST_ACC: {} {}%".format(eval_name, acc))
+    tlogger.print("saving infer_result.csv ...")
     ### build records.txt
-    msg = "[Evaluation Results]\n"
-    msg += "Project: {}, Experiment: {}\n".format(args.project_name, args.exp_name)
-    msg += "Samples: {}\n".format(len(val_loader.dataset))
-    msg += "\n"
-    for name in eval_acces:
-        msg += "    {} {}%\n".format(name, eval_acces[name])
-    msg += "\n"
-    msg += "BEST_ACC: {} {}% ".format(eval_name, acc)
+    # msg = "[Evaluation Results]\n"
+    # msg += "Project: {}, Experiment: {}\n".format(args.project_name, args.exp_name)
+    # msg += "Samples: {}\n".format(len(val_loader.dataset))
+    # msg += "\n"
+    # for name in eval_acces:
+    #     msg += "    {} {}%\n".format(name, eval_acces[name])
+    # msg += "\n"
+    # msg += "BEST_ACC: {} {}% ".format(eval_name, acc)
 
-    with open(args.save_dir + "infer_results.txt", "w") as ftxt:
-        ftxt.write(msg)
+    # with open(args.save_dir + "infer_results.txt", "w") as ftxt:
+    #     ftxt.write(msg)
 
 
 def plot_confusion_matrix(cm, label_names, save_name, title='Confusion Matrix acc = ', accuracy=0):
