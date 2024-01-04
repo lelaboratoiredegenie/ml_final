@@ -1,7 +1,3 @@
-"""
-infer version1.0
-2022.06.07
-"""
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
