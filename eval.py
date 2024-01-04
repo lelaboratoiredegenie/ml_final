@@ -288,11 +288,11 @@ def evaluate_cm(args, model, test_loader):
             #     this_name = "layer" + str(args.highest)
             #     _cal_evalute_metric(corrects, total_samples, outs[this_name].mean(1), labels, this_name, scores, score_names)
 
-            # if args.use_combiner:
-            #     this_name = "combiner"
-            #     _cal_evalute_metric(corrects, total_samples, outs["comb_outs"], labels, this_name, scores, score_names)
+            if args.use_combiner:
+                this_name = "combiner"
+                _cal_evalute_metric(corrects, total_samples, outs["comb_outs"], labels, this_name, scores, score_names)
 
-            _average_top_k_result(corrects, total_samples, scores, labels)
+            # _average_top_k_result(corrects, total_samples, scores, labels)
 
             for i in range(scores[0].shape[0]):
                 results.append([test_loader.dataset.data_infos[ids[i].item()]['path'], int(labels[i].item()),
@@ -302,14 +302,11 @@ def evaluate_cm(args, model, test_loader):
                                 scores[0][i].argmax().item()])  # 图片路径，标签，预测标签，得分
 
         """ wirte xlsx"""
-        # writer = pd.ExcelWriter(args.save_dir + 'infer_result.csv')
         df = pd.DataFrame(outputs, columns=["id", "label"])
         csv_file_path = './infer_result.csv'
         with open(csv_file_path, 'w') as file:
           df.to_csv(csv_file_path, index=False)
-        # writer.save()
-        # writer.close()
-
+       
         """ calculate accuracy """
 
         best_top1 = 0.0
